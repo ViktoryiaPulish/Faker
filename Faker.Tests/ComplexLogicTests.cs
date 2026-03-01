@@ -61,4 +61,13 @@ public class ComplexLogicTests
         int? value = _faker.Create<int?>();
         Assert.NotNull(value);
     }
+
+    [Fact]
+    public void Create_NestedList_Works()
+    {
+        var nestedList = _faker.Create<List<List<int>>>();
+        Assert.NotNull(nestedList);
+        Assert.NotEmpty(nestedList); 
+        Assert.NotEmpty(nestedList[0]); 
+    }
 }
