@@ -40,7 +40,7 @@ namespace Faker.Tests
         {
             var config = new FakerConfig();
             Assert.Throws<ArgumentException>(() =>
-                config.Add<User, string, ConstantGenerator>(u => "строка"));
+                config.Add<User, string, ConstantGenerator>(u => "string"));
         }
     }
 }

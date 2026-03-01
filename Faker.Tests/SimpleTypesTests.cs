@@ -2,39 +2,48 @@ using Xunit;
 using System;
 using Faker;
 
-namespace Faker.Tests
+namespace Faker.Tests;
+
+public class SimpleTypesTests
 {
-    public class SimpleTypesTests
+    private readonly Faker _faker = new();
+
+    [Fact]
+    public void Create_PrimitiveNumbers_ReturnsValidValues()
     {
-        private Faker _faker = new Faker();
+        Assert.NotEqual(0, _faker.Create<int>());
+        Assert.NotEqual(0L, _faker.Create<long>());
+        Assert.NotEqual((short)0, _faker.Create<short>());
+        Assert.NotEqual((byte)0, _faker.Create<byte>());
+    }
 
-        [Fact]
-        public void Create_PrimitiveTypes_ReturnsCorrectValues()
-        {
-            int i = _faker.Create<int>();
-            string s = _faker.Create<string>();
-            double d = _faker.Create<double>();
-            bool b = _faker.Create<bool>();
+    [Fact]
+    public void Create_FloatingPointNumbers_ReturnsValueInRange()
+    {
+        Assert.InRange(_faker.Create<double>(), 0d, 1d);
+        Assert.InRange(_faker.Create<float>(), 0f, 1f);
+        Assert.NotEqual(0m, _faker.Create<decimal>());
+    }
 
-            Assert.NotEqual(0, i);
-            Assert.False(string.IsNullOrEmpty(s));
-            Assert.InRange(d, 0.0, 1.0);
-        }
+    [Fact]
+    public void Create_StringAndChar_ReturnsNonDefaultValues()
+    {
+        Assert.False(string.IsNullOrEmpty(_faker.Create<string>()));
+        Assert.NotEqual('\0', _faker.Create<char>());
+    }
 
-        [Fact]
-        public void Create_DateTime_ReturnsDateWithinRange()
-        {
-            DateTime date = _faker.Create<DateTime>();
+    [Fact]
+    public void Create_DateTime_ReturnsDateWithinRange()
+    {
+        var date = _faker.Create<DateTime>();
+        Assert.True(date >= new DateTime(2000, 1, 1));
+        Assert.True(date <= DateTime.Now);
+    }
 
-            Assert.True(date >= new DateTime(2000, 1, 1));
-            Assert.True(date <= DateTime.Now);
-        }
-
-        [Fact]
-        public void Create_Decimal_ReturnsNonDefaultValue()
-        {
-            decimal dec = _faker.Create<decimal>();
-            Assert.NotEqual(0m, dec);
-        }
+    [Fact]
+    public void Create_Bool_ReturnsValidBoolean()
+    {
+        var value = _faker.Create<bool>();
+        Assert.IsType<bool>(value);
     }
 }

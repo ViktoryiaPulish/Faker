@@ -5,106 +5,60 @@ using Faker;
 
 namespace Faker.Tests;
 
+public class Student
+{
+    public string Name { get; }
+    public int Age { get; }
+
+    public Student(string name) { Name = name; }
+
+    public Student(string name, int age)
+    {
+        Name = name;
+        Age = age;
+    }
+}
+
+public class Course
+{
+    public Course RelatedCourse { get; set; } 
+}
+
 public class ComplexLogicTests
 {
-    private readonly Faker _faker = new();
+    private readonly Faker _faker = new Faker();
 
     [Fact]
-    public void Create_Int_ReturnsNonDefaultValue()
+    public void Create_GenericList_ReturnsPopulatedList()
     {
-        var value = _faker.Create<int>();
-        Assert.IsType<int>(value);
-        Assert.NotEqual(0, value);
+        List<int> numbers = _faker.Create<List<int>>();
+
+        Assert.NotNull(numbers);
+        Assert.NotEmpty(numbers);
     }
 
     [Fact]
-    public void Create_Long_ReturnsNonDefaultValue()
+    public void Create_RecursiveClass_HandlesCycleBySettingNull()
     {
-        var value = _faker.Create<long>();
-        Assert.IsType<long>(value);
-        Assert.NotEqual(0L, value);
+        Course math = _faker.Create<Course>();
+
+        Assert.NotNull(math);
+        Assert.Null(math.RelatedCourse); 
     }
 
     [Fact]
-    public void Create_Double_ReturnsValueInRange()
+    public void Create_ComplexObjectWithMultipleConstructors_UsesLargestOne()
     {
-        var value = _faker.Create<double>();
-        Assert.InRange(value, 0d, 1d);
+        Student student = _faker.Create<Student>();
+
+        Assert.NotNull(student.Name);
+        Assert.NotEqual(0, student.Age); 
     }
 
     [Fact]
-    public void Create_Float_ReturnsValueInRange()
+    public void Create_NullableType_ReturnsValue()
     {
-        var value = _faker.Create<float>();
-        Assert.InRange(value, 0f, 1f);
-    }
-
-    [Fact]
-    public void Create_Byte_ReturnsNonDefaultValue()
-    {
-        var value = _faker.Create<byte>();
-        Assert.IsType<byte>(value);
-        Assert.NotEqual(0, value);
-    }
-
-    [Fact]
-    public void Create_Short_ReturnsNonDefaultValue()
-    {
-        var value = _faker.Create<short>();
-        Assert.IsType<short>(value);
-        Assert.NotEqual(0, value);
-    }
-
-    [Fact]
-    public void Create_Bool_ReturnsValidBoolean()
-    {
-        var value = _faker.Create<bool>();
-        Assert.IsType<bool>(value);
-    }
-
-    [Fact]
-    public void Create_Char_ReturnsNonDefaultValue()
-    {
-        var value = _faker.Create<char>();
-        Assert.IsType<char>(value);
-        Assert.NotEqual('\0', value);
-    }
-
-    [Fact]
-    public void Create_Decimal_ReturnsNonDefaultValue()
-    {
-        var value = _faker.Create<decimal>();
-        Assert.IsType<decimal>(value);
-        Assert.NotEqual(0m, value);
-    }
-
-    [Fact]
-    public void Create_String_ReturnsNonEmptyString()
-    {
-        var value = _faker.Create<string>();
-        Assert.False(string.IsNullOrEmpty(value));
-    }
-
-    [Fact]
-    public void Create_DateTime_ReturnsDateWithinRange()
-    {
-        var value = _faker.Create<DateTime>();
-        Assert.True(value >= new DateTime(2000, 1, 1));
-        Assert.True(value <= DateTime.Today);
-    }
-
-    [Fact]
-    public void Create_NullableInt_ReturnsValueOrNull()
-    {
-        var value = _faker.Create<int?>();
-        Assert.True(value == null || value.GetType() == typeof(int));
-    }
-
-    [Fact]
-    public void Create_ListOfInts_ReturnsPopulatedList()
-    {
-        var list = _faker.Create<List<int>>();
-        Assert.NotNull(list);
-        Assert.NotEmpty(list);
+        int? value = _faker.Create<int?>();
+        Assert.NotNull(value);
     }
 }

@@ -81,7 +81,7 @@ namespace Faker
             _generators[typeof(byte)] = new ByteGenerator();
             _generators[typeof(short)] = new ShortGenerator();
             _generators[typeof(char)] = new CharGenerator();
-            _generators[typeof(decimal)] = new DecimalGenerator(); 
+            _generators[typeof(decimal)] = new DecimalGenerator();
 
             _genericGenerators[typeof(List<>)] = typeof(ListGenerator<>);
             _genericGenerators[typeof(IEnumerable<>)] = typeof(ListGenerator<>);
