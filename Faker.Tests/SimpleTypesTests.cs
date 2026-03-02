@@ -4,6 +4,8 @@ using Faker;
 
 namespace Faker.Tests;
 
+public enum TestColor { Red, Green, Blue }
+
 public class SimpleTypesTests
 {
     private readonly Faker _faker = new();
@@ -45,5 +47,12 @@ public class SimpleTypesTests
     {
         var value = _faker.Create<bool>();
         Assert.IsType<bool>(value);
+    }
+
+    [Fact]
+    public void Create_Enum_ReturnsValidValue()
+    {
+        var color = _faker.Create<TestColor>();
+        Assert.True(Enum.IsDefined(typeof(TestColor), color));
     }
 }

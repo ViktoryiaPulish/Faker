@@ -70,4 +70,13 @@ public class ComplexLogicTests
         Assert.NotEmpty(nestedList); 
         Assert.NotEmpty(nestedList[0]); 
     }
+
+    [Fact]
+    public void Create_NullableEnum_ReturnsValueOrNull()
+    {
+        var value = _faker.Create<TestColor?>();
+        // Nullable типы — это дженерики (Nullable<T>), 
+        // поэтому тут сработает и логика дженериков, и логика Enum.
+        Assert.True(value == null || Enum.IsDefined(typeof(TestColor), value.Value));
+    }
 }
